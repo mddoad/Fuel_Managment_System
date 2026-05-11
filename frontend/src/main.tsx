@@ -4,9 +4,11 @@ import React from 'react';
 import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import Dashboard from './pages/Dashboard';
+import DistributorSignup from './pages/DistributorSignup';
 import ForgotPassword from './pages/ForgotPassword';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
+import UserSignup from './pages/UserSignup';
 
 function RequireAuth({ children }: { children: React.ReactNode }) {
   const token = localStorage.getItem('accessToken');
@@ -20,8 +22,11 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       <Routes>
         {/* Public */}
         <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+
+        <Route path="/signup" element={<Signup />} />
+        <Route path="/signup/user" element={<UserSignup />} />
+        <Route path="/signup/distributor" element={<DistributorSignup />} />
 
         {/* Protected */}
         <Route
