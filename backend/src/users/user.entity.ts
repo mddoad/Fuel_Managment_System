@@ -20,11 +20,17 @@ export class User {
   @Column({ type: 'varchar', length: 120, unique: true })
   email!: string;
 
+  @Column({ type: 'date', nullable: true })
+  dob!: string | null;
+
   @Column({ type: 'varchar', length: 255 })
   passwordHash!: string;
 
   @Column({ type: 'enum', enum: Role, default: Role.USER })
   role!: Role;
+
+  @Column({ type: 'boolean', default: true })
+  isActive!: boolean;
 
   @CreateDateColumn()
   createdAt!: Date;
