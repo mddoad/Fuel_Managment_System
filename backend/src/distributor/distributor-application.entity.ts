@@ -30,7 +30,11 @@ export class DistributorApplication {
   @Column({ type: 'varchar', length: 500 })
   licensePdfPath!: string;
 
-  @Column({ type: 'enum', enum: DistributorApplicationStatus, default: DistributorApplicationStatus.PENDING })
+  @Column({
+    type: 'enum',
+    enum: DistributorApplicationStatus,
+    default: DistributorApplicationStatus.PENDING,
+  })
   status!: DistributorApplicationStatus;
 
   @CreateDateColumn()

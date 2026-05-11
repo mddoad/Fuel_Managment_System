@@ -8,6 +8,7 @@ import { AuthModule } from './auth/auth.module';
 import { StationsModule } from './stations/stations.module';
 import { VehiclesModule } from './vehicles/vehicles.module';
 import { FuelLogsModule } from './fuel-logs/fuel-logs.module';
+import { DistributorModule } from './distributor/distributor.module';
 
 @Module({
   imports: [
@@ -34,6 +35,7 @@ import { FuelLogsModule } from './fuel-logs/fuel-logs.module';
     StationsModule,
     VehiclesModule,
     FuelLogsModule,
+    DistributorModule,
   ],
   controllers: [AppController],
   providers: [AppService],
