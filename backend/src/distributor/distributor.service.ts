@@ -22,13 +22,11 @@ export class DistributorService {
       throw new BadRequestException('Password and confirm password do not match');
     }
 
-    // prevent duplicates in users table
     const existsUser = await this.userRepo.findOne({
       where: [{ email: dto.email }, { phone: dto.ownerPhone }],
     });
     if (existsUser) throw new BadRequestException('Email or phone already exists');
 
-    // prevent duplicates in applications table
     const existsApp = await this.appRepo.findOne({
       where: [{ email: dto.email }, { ownerPhone: dto.ownerPhone }],
     });
@@ -92,5 +90,11 @@ export class DistributorService {
     await this.appRepo.save(app);
 
     return { message: 'Distributor approved', distributorUserId: user.id };
+  }
+  
+    async getApplication(id: number) {
+    const app = await this.appRepo.findOne({ where: { id } });
+    if (!app) throw new BadRequestException('Application not found');
+    return app;
   }
 }

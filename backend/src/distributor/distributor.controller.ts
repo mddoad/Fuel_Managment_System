@@ -50,7 +50,6 @@ export class DistributorController {
     return this.distributorService.register(dto, file.path);
   }
 
-  // ADMIN only
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(Role.ADMIN)
   @Get('applications/pending')
@@ -58,7 +57,13 @@ export class DistributorController {
     return this.distributorService.listPending();
   }
 
-  // ADMIN only
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(Role.ADMIN)
+  @Get('applications/:id')
+  getOne(@Param('id', ParseIntPipe) id: number) {
+    return this.distributorService.getApplication(id);
+  }
+
   @UseGuards(AuthGuard('jwt'), RolesGuard)
   @Roles(Role.ADMIN)
   @Post('applications/:id/approve')

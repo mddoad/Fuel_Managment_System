@@ -26,7 +26,7 @@ export class RegisterDistributorDto {
   @IsEmail({}, { message: 'Email must be valid' })
   email!: string;
 
-  @MinLength(8)
+  @MinLength(8, { message: 'Password must be at least 8 characters' })
   @Matches(/^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[^A-Za-z0-9]).+$/, {
     message: 'Password must contain uppercase, lowercase, number, and special character',
   })
