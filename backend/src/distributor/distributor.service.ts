@@ -6,6 +6,7 @@ import { Role } from '../auth/role.enum';
 import { User } from '../users/user.entity';
 import { DistributorApplication } from './distributor-application.entity';
 import { DistributorApplicationStatus } from './distributor-application-status.enum';
+import { DistributorProfile } from './diatributor-profile.entity';
 import { RegisterDistributorDto } from './dto/register-distributor.dto';
 
 @Injectable()
@@ -13,6 +14,8 @@ export class DistributorService {
   constructor(
     @InjectRepository(DistributorApplication)
     private readonly appRepo: Repository<DistributorApplication>,
+    @InjectRepository(DistributorProfile)
+    private readonly profileRepo: Repository<DistributorProfile>,
     @InjectRepository(User)
     private readonly userRepo: Repository<User>,
   ) {}
@@ -62,6 +65,12 @@ export class DistributorService {
     });
   }
 
+  async getApplication(id: number) {
+    const app = await this.appRepo.findOne({ where: { id } });
+    if (!app) throw new BadRequestException('Application not found');
+    return app;
+  }
+
   async approve(applicationId: number) {
     const app = await this.appRepo.findOne({ where: { id: applicationId } });
     if (!app) throw new BadRequestException('Application not found');
@@ -70,7 +79,6 @@ export class DistributorService {
       throw new BadRequestException(`Application already ${app.status}`);
     }
 
-    // Create distributor user account now
     const existing = await this.userRepo.findOne({ where: { email: app.email } });
     if (existing) throw new BadRequestException('Email already exists');
 
@@ -86,15 +94,20 @@ export class DistributorService {
 
     await this.userRepo.save(user);
 
+    const profile = this.profileRepo.create({
+      userId: user.id,
+      ownerName: app.ownerName,
+      ownerPhone: app.ownerPhone,
+      stationName: app.stationName,
+      stationPhone: app.stationPhone,
+      address: app.address,
+      licensePdfPath: app.licensePdfPath,
+    });
+    await this.profileRepo.save(profile);
+
     app.status = DistributorApplicationStatus.APPROVED;
     await this.appRepo.save(app);
 
     return { message: 'Distributor approved', distributorUserId: user.id };
-  }
-  
-    async getApplication(id: number) {
-    const app = await this.appRepo.findOne({ where: { id } });
-    if (!app) throw new BadRequestException('Application not found');
-    return app;
   }
 }

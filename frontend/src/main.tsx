@@ -16,6 +16,10 @@ import AdminDashboard from './pages/AdminDashboard';
 import AdminDistributorRequests from './pages/AdminDistributorRequests';
 import AdminDistributorRequestDetails from './pages/AdminDistributorRequestDetails';
 
+import AdminAddAdmin from './pages/admin/AdminAddAdmin';
+import AdminAddUser from './pages/admin/AdminAddUser';
+import AdminAddDistributor from './pages/admin/AdminAddDistributor';
+
 type Me = { id: number; role: 'ADMIN' | 'USER' | 'DISTRIBUTOR' };
 
 function RequireAuth({ children }: { children: React.ReactNode }) {
@@ -81,6 +85,33 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           element={
             <RequireAuth>
               <AdminDistributorRequestDetails />
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          path="/admin/add-admin"
+          element={
+            <RequireAuth>
+              <AdminAddAdmin />
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          path="/admin/add-user"
+          element={
+            <RequireAuth>
+              <AdminAddUser />
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          path="/admin/add-distributor"
+          element={
+            <RequireAuth>
+              <AdminAddDistributor />
             </RequireAuth>
           }
         />
