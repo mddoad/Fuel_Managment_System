@@ -14,7 +14,6 @@ export class AdminCreateUserDto {
   })
   phone!: string;
 
-  // for USER/ADMIN we will require dob in controller logic; for DISTRIBUTOR we allow null
   @IsOptional()
   @IsDateString({}, { message: 'DOB must be a valid date (YYYY-MM-DD)' })
   dob?: string;
@@ -31,5 +30,5 @@ export class AdminCreateUserDto {
 
   @IsString()
   @IsNotEmpty()
-  role!: Role; // 'ADMIN' | 'USER' | 'DISTRIBUTOR'
+  role!: Role;
 }
