@@ -5,7 +5,7 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { api } from './api/client';
 
-import Dashboard from './pages/Dashboard';
+import Dashboard from './pages/Dashboard'; // (you can keep for now; later we will use DistributorDashboard)
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import UserSignup from './pages/UserSignup';
@@ -19,6 +19,11 @@ import AdminDistributorRequestDetails from './pages/AdminDistributorRequestDetai
 import AdminAddAdmin from './pages/admin/AdminAddAdmin';
 import AdminAddUser from './pages/admin/AdminAddUser';
 import AdminAddDistributor from './pages/admin/AdminAddDistributor';
+
+// NEW user pages
+import UserDashboard from './pages/user/UserDashboard';
+import MyVehicles from './pages/user/MyVehicles';
+import ApplyVehicle from './pages/user/ApplyVehicle';
 
 type Me = { id: number; role: 'ADMIN' | 'USER' | 'DISTRIBUTOR' };
 
@@ -47,6 +52,9 @@ function HomeRouter() {
   if (!me) return <Navigate to="/login" replace />;
 
   if (me.role === 'ADMIN') return <AdminDashboard />;
+  if (me.role === 'USER') return <UserDashboard />;
+
+  // DISTRIBUTOR: for now keep old dashboard until we build distributor dashboard
   return <Dashboard />;
 }
 
@@ -71,7 +79,25 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           }
         />
 
-        {/* Admin protected routes */}
+        {/* USER routes */}
+        <Route
+          path="/user/vehicles"
+          element={
+            <RequireAuth>
+              <MyVehicles />
+            </RequireAuth>
+          }
+        />
+        <Route
+          path="/user/vehicles/apply"
+          element={
+            <RequireAuth>
+              <ApplyVehicle />
+            </RequireAuth>
+          }
+        />
+
+        {/* Admin routes */}
         <Route
           path="/admin/distributor-requests"
           element={
@@ -88,7 +114,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             </RequireAuth>
           }
         />
-
         <Route
           path="/admin/add-admin"
           element={
@@ -97,7 +122,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             </RequireAuth>
           }
         />
-
         <Route
           path="/admin/add-user"
           element={
@@ -106,7 +130,6 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
             </RequireAuth>
           }
         />
-
         <Route
           path="/admin/add-distributor"
           element={
