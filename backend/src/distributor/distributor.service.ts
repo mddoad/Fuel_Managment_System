@@ -6,7 +6,7 @@ import { Role } from '../auth/role.enum';
 import { User } from '../users/user.entity';
 import { DistributorApplication } from './distributor-application.entity';
 import { DistributorApplicationStatus } from './distributor-application-status.enum';
-import { DistributorProfile } from './diatributor-profile.entity';
+import { DistributorProfile } from './distributor-profile.entity';
 import { RegisterDistributorDto } from './dto/register-distributor.dto';
 
 @Injectable()

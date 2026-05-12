@@ -9,12 +9,11 @@ import { StationsModule } from './stations/stations.module';
 import { VehiclesModule } from './vehicles/vehicles.module';
 import { FuelLogsModule } from './fuel-logs/fuel-logs.module';
 import { DistributorModule } from './distributor/distributor.module';
+import { AdminModule } from './admin/admin.module';
 
 @Module({
   imports: [
-    ConfigModule.forRoot({
-      isGlobal: true,
-    }),
+    ConfigModule.forRoot({ isGlobal: true }),
 
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
@@ -32,6 +31,7 @@ import { DistributorModule } from './distributor/distributor.module';
 
     UsersModule,
     AuthModule,
+    AdminModule,    
     StationsModule,
     VehiclesModule,
     FuelLogsModule,
