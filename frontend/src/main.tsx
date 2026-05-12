@@ -25,6 +25,9 @@ import UserDashboard from './pages/user/UserDashboard';
 import MyVehicles from './pages/user/MyVehicles';
 import ApplyVehicle from './pages/user/ApplyVehicle';
 
+import AdminVehicleRequests from './pages/admin/AdminVehicleRequests';
+import AdminVehicleRequestDetails from './pages/admin/AdminVehicleRequestDetails';
+
 type Me = { id: number; role: 'ADMIN' | 'USER' | 'DISTRIBUTOR' };
 
 function RequireAuth({ children }: { children: React.ReactNode }) {
@@ -135,6 +138,24 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           element={
             <RequireAuth>
               <AdminAddDistributor />
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          path="/admin/vehicle-requests"
+          element={
+            <RequireAuth>
+              <AdminVehicleRequests />
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          path="/admin/vehicle-requests/:id"
+          element={
+            <RequireAuth>
+              <AdminVehicleRequestDetails />
             </RequireAuth>
           }
         />

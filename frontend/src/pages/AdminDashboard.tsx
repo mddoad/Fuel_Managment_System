@@ -124,6 +124,10 @@ export default function AdminDashboard() {
           <Link className="btn" to="/admin/distributor-requests">
             Open Requests
           </Link>
+
+          <Link className="btn" to="/admin/vehicle-requests">
+            Open Vehicle Requests
+          </Link>
         </div>
 
         <div className="card" style={{ padding: 16 }}>
