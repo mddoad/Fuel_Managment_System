@@ -136,6 +136,17 @@ export default function AdminDashboard() {
             Open Requests
           </Link>
         </div>
+
+        <div className="card" style={{ padding: 16 }}>
+          <div style={{ fontWeight: 900, fontSize: 18, marginBottom: 8 }}>Fuel Prices</div>
+          <div className="muted" style={{ marginBottom: 12 }}>
+            Set Octane/Diesel/CNG price. Users will see total cost automatically.
+          </div>
+
+          <Link className="btn" to="/admin/fuel-prices">
+            Manage Prices
+          </Link>
+        </div>
       </div>
     </div>
   );

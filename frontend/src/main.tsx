@@ -27,6 +27,7 @@ import ApplyVehicle from './pages/user/ApplyVehicle';
 
 import AdminVehicleRequests from './pages/admin/AdminVehicleRequests';
 import AdminVehicleRequestDetails from './pages/admin/AdminVehicleRequestDetails';
+import AdminFuelPrices from './pages/admin/AdminFuelPrices';
 
 type Me = { id: number; role: 'ADMIN' | 'USER' | 'DISTRIBUTOR' };
 
@@ -156,6 +157,15 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           element={
             <RequireAuth>
               <AdminVehicleRequestDetails />
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          path="/admin/fuel-prices"
+          element={
+            <RequireAuth>
+              <AdminFuelPrices />
             </RequireAuth>
           }
         />
