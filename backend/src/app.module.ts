@@ -10,6 +10,7 @@ import { VehiclesModule } from './vehicles/vehicles.module';
 import { FuelLogsModule } from './fuel-logs/fuel-logs.module';
 import { DistributorModule } from './distributor/distributor.module';
 import { AdminModule } from './admin/admin.module';
+import { FuelPricesModule } from './fuel-prices/fuel-prices.module';
 
 @Module({
   imports: [
@@ -36,6 +37,7 @@ import { AdminModule } from './admin/admin.module';
     VehiclesModule,
     FuelLogsModule,
     DistributorModule,
+    FuelPricesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
