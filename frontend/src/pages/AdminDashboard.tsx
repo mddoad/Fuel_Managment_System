@@ -124,17 +124,17 @@ export default function AdminDashboard() {
           <Link className="btn" to="/admin/distributor-requests">
             Open Requests
           </Link>
-
-          <Link className="btn" to="/admin/vehicle-requests">
-            Open Vehicle Requests
-          </Link>
         </div>
 
         <div className="card" style={{ padding: 16 }}>
-          <div style={{ fontWeight: 900, fontSize: 18, marginBottom: 8 }}>Coming next</div>
-          <div className="muted">
-            Stations/Vehicles management, user management, reports, etc.
+          <div style={{ fontWeight: 900, fontSize: 18, marginBottom: 8 }}>Vehicle Requests</div>
+          <div className="muted" style={{ marginBottom: 12 }}>
+            Review vehicle registration PDFs and approve user vehicle requests.
           </div>
+
+          <Link className="btn" to="/admin/vehicle-requests">
+            Open Requests
+          </Link>
         </div>
       </div>
     </div>

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { api } from '../../api/client';
 
-type VehicleReq = {
+type VehicleRequest = {
   id: number;
   userId: number;
   type: string;
@@ -18,7 +18,7 @@ export default function AdminVehicleRequestDetails() {
   const { id } = useParams();
   const reqId = Number(id);
 
-  const [item, setItem] = useState<VehicleReq | null>(null);
+  const [item, setItem] = useState<VehicleRequest | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
 
@@ -80,8 +80,13 @@ export default function AdminVehicleRequestDetails() {
         <div>
           <div className="badge" style={{ marginBottom: 10 }}>Admin</div>
           <h1 style={{ margin: 0, fontSize: 26 }}>Vehicle Request #{reqId}</h1>
-          {item && <div className="muted" style={{ marginTop: 8 }}>Status: <span className="badge">{item.status}</span></div>}
+          {item && (
+            <div className="muted" style={{ marginTop: 8 }}>
+              Status: <span className="badge">{item.status}</span>
+            </div>
+          )}
         </div>
+
         <button className="btn btn-secondary" onClick={() => navigate('/admin/vehicle-requests')}>Back</button>
       </div>
 
@@ -91,21 +96,23 @@ export default function AdminVehicleRequestDetails() {
         <div className="grid grid-2" style={{ marginTop: 14 }}>
           <div className="card" style={{ padding: 16 }}>
             <div style={{ fontWeight: 900, marginBottom: 10 }}>Information</div>
-            <div className="muted" style={{ lineHeight: 1.8 }}>
-              <div><b style={{ color: 'white' }}>Vehicle:</b> {item.plateNumber}</div>
+            <div className="muted" style={{ fontSize: 13, lineHeight: 1.8 }}>
+              <div><b style={{ color: 'white' }}>Vehicle No:</b> {item.plateNumber}</div>
               <div><b style={{ color: 'white' }}>Type:</b> {item.type}</div>
               <div><b style={{ color: 'white' }}>Owner:</b> {item.ownerName} ({item.ownerPhone})</div>
               <div><b style={{ color: 'white' }}>UserId:</b> {item.userId}</div>
               <div><b style={{ color: 'white' }}>Created:</b> {new Date(item.createdAt).toLocaleString()}</div>
             </div>
 
-            <div style={{ display: 'flex', gap: 10, marginTop: 14 }}>
+            <div style={{ display: 'flex', gap: 10, marginTop: 14, flexWrap: 'wrap' }}>
               <button className="btn" onClick={approve} disabled={loading || item.status !== 'PENDING'}>
-                {loading ? 'Processing...' : 'Approve'}
+                {loading ? 'Working...' : 'Approve'}
               </button>
+
               <button className="btn btn-secondary" onClick={reject} disabled={loading || item.status !== 'PENDING'}>
                 Reject
               </button>
+
               {pdfUrl && (
                 <a className="btn btn-secondary" href={pdfUrl} target="_blank" rel="noreferrer">
                   Open PDF
@@ -116,12 +123,17 @@ export default function AdminVehicleRequestDetails() {
 
           <div className="card" style={{ padding: 16 }}>
             <div style={{ fontWeight: 900, marginBottom: 10 }}>Registration PDF</div>
-            {!pdfUrl && <div className="muted">No PDF found.</div>}
+            {!pdfUrl && <div className="muted">No PDF path found.</div>}
             {pdfUrl && (
               <iframe
-                title="Registration PDF"
+                title="Vehicle registration PDF"
                 src={pdfUrl}
-                style={{ width: '100%', height: 520, border: '1px solid rgba(255,255,255,0.12)', borderRadius: 12 }}
+                style={{
+                  width: '100%',
+                  height: 520,
+                  border: '1px solid rgba(255,255,255,0.12)',
+                  borderRadius: 12,
+                }}
               />
             )}
           </div>

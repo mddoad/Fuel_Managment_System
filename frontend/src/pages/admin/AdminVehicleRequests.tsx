@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { api } from '../../api/client';
 
-type VehicleReq = {
+type VehicleRequest = {
   id: number;
   userId: number;
   type: string;
@@ -15,7 +15,7 @@ type VehicleReq = {
 };
 
 export default function AdminVehicleRequests() {
-  const [items, setItems] = useState<VehicleReq[]>([]);
+  const [items, setItems] = useState<VehicleRequest[]>([]);
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
 
@@ -44,6 +44,7 @@ export default function AdminVehicleRequests() {
           <h1 style={{ margin: 0, fontSize: 26 }}>Vehicle Requests</h1>
           <div className="muted" style={{ marginTop: 8 }}>Pending: {items.length}</div>
         </div>
+
         <button className="btn btn-secondary" onClick={() => navigate('/')}>Back</button>
       </div>
 
@@ -58,7 +59,7 @@ export default function AdminVehicleRequests() {
               <th>Owner</th>
               <th>UserId</th>
               <th>Created</th>
-              <th style={{ width: 120 }}>Action</th>
+              <th style={{ width: 140 }}>Action</th>
             </tr>
           </thead>
           <tbody>
@@ -76,7 +77,9 @@ export default function AdminVehicleRequests() {
                 <td className="muted">{v.userId}</td>
                 <td className="muted">{new Date(v.createdAt).toLocaleString()}</td>
                 <td>
-                  <Link className="btn" to={`/admin/vehicle-requests/${v.id}`}>View</Link>
+                  <Link className="btn" to={`/admin/vehicle-requests/${v.id}`}>
+                    View
+                  </Link>
                 </td>
               </tr>
             ))}
