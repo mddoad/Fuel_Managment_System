@@ -8,6 +8,10 @@ export class DistributorProfile {
   @Column({ type: 'int', unique: true })
   userId!: number;
 
+  // NEW: Station row that represents this distributor station
+  @Column({ type: 'int', nullable: true })
+  stationId!: number | null;
+
   @Column({ type: 'varchar', length: 120 })
   ownerName!: string;
 

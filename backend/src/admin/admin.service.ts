@@ -8,6 +8,7 @@ import { User } from '../users/user.entity';
 import { UsersService } from '../users/users.service';
 import { AdminCreateDistributorDto } from './dto/admin-create-distributor.dto';
 import { AdminCreateUserDto } from './dto/admin-create-user.dto';
+import { Station } from '../stations/station.entity';
 
 function calcAge(dob: Date) {
   const today = new Date();
@@ -23,6 +24,7 @@ export class AdminService {
     private readonly usersService: UsersService,
     @InjectRepository(User) private readonly usersRepo: Repository<User>,
     @InjectRepository(DistributorProfile) private readonly profileRepo: Repository<DistributorProfile>,
+    @InjectRepository(Station) private readonly stationRepo: Repository<Station>,
   ) {}
 
   async createUser(dto: AdminCreateUserDto) {
@@ -83,9 +85,17 @@ export class AdminService {
     });
     await this.usersRepo.save(user);
 
+    // Create station row for this distributor
+    const station = this.stationRepo.create({
+      name: dto.stationName,
+      address: dto.address,
+    });
+    await this.stationRepo.save(station);
+
     // create distributor profile
     const profile = this.profileRepo.create({
       userId: user.id,
+      stationId: station.id,
       ownerName: dto.ownerName,
       ownerPhone: dto.ownerPhone,
       stationName: dto.stationName,

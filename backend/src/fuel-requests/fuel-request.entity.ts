@@ -1,4 +1,5 @@
 import { Column, CreateDateColumn, Entity, ManyToOne, PrimaryGeneratedColumn, UpdateDateColumn } from 'typeorm';
+import { Station } from '../stations/station.entity';
 import { User } from '../users/user.entity';
 import { Vehicle } from '../vehicles/vehicle.entity';
 
@@ -26,13 +27,9 @@ export class FuelRequest {
   @ManyToOne(() => Vehicle, { eager: true })
   vehicle!: Vehicle;
 
-  // who will receive the request
-  @Column({ type: 'int' })
-  distributorUserId!: number;
-
-  // snapshot station name (from distributor profile)
-  @Column({ type: 'varchar', length: 120 })
-  stationName!: string;
+  // IMPORTANT: mapped distributor station (Station row)
+  @ManyToOne(() => Station, { eager: true })
+  station!: Station;
 
   @Column({ type: 'enum', enum: FuelType })
   fuelType!: FuelType;
@@ -49,7 +46,6 @@ export class FuelRequest {
   @Column({ type: 'enum', enum: FuelRequestStatus, default: FuelRequestStatus.PENDING })
   status!: FuelRequestStatus;
 
-  // distributor who accepted/rejected/completed
   @ManyToOne(() => User, { eager: true, nullable: true })
   acceptedBy?: User | null;
 

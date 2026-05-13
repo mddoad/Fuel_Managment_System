@@ -11,6 +11,7 @@ import { FuelLogsModule } from './fuel-logs/fuel-logs.module';
 import { DistributorModule } from './distributor/distributor.module';
 import { AdminModule } from './admin/admin.module';
 import { FuelPricesModule } from './fuel-prices/fuel-prices.module';
+import { FuelRequestsModule } from './fuel-requests/fuel-requests.module';
 
 @Module({
   imports: [
@@ -38,6 +39,7 @@ import { FuelPricesModule } from './fuel-prices/fuel-prices.module';
     FuelLogsModule,
     DistributorModule,
     FuelPricesModule,
+    FuelRequestsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

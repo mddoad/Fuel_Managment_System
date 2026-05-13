@@ -8,6 +8,7 @@ import { DistributorApplication } from './distributor-application.entity';
 import { DistributorApplicationStatus } from './distributor-application-status.enum';
 import { DistributorProfile } from './distributor-profile.entity';
 import { RegisterDistributorDto } from './dto/register-distributor.dto';
+import { Station } from '../stations/station.entity';
 
 @Injectable()
 export class DistributorService {
@@ -18,6 +19,8 @@ export class DistributorService {
     private readonly profileRepo: Repository<DistributorProfile>,
     @InjectRepository(User)
     private readonly userRepo: Repository<User>,
+    @InjectRepository(Station)
+    private readonly stationRepo: Repository<Station>,
   ) {}
 
   async register(dto: RegisterDistributorDto, licensePdfPath: string) {
@@ -94,8 +97,16 @@ export class DistributorService {
 
     await this.userRepo.save(user);
 
+    // Create station row for this distributor
+    const station = this.stationRepo.create({
+      name: app.stationName,
+      address: app.address,
+    });
+    await this.stationRepo.save(station);
+
     const profile = this.profileRepo.create({
       userId: user.id,
+      stationId: station.id,
       ownerName: app.ownerName,
       ownerPhone: app.ownerPhone,
       stationName: app.stationName,
@@ -112,19 +123,15 @@ export class DistributorService {
   }
 
     async listApprovedStations() {
-    // DistributorProfile table: one row per distributor user
-    // Return only what user needs
-    return this.profileRepo.find({
-      order: { id: 'DESC' },
-      select: {
-        id: true,
-        userId: true,
-        stationName: true,
-        stationPhone: true,
-        address: true,
-        ownerName: true,
-        ownerPhone: true,
-      },
-    });
-  }
+      return this.profileRepo.find({
+        order: { id: 'DESC' },
+        select: {
+          userId: true,
+          stationId: true,
+          stationName: true,
+          stationPhone: true,
+          address: true,
+        } as any,
+      });
+    }
 }
