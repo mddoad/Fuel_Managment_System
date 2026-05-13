@@ -125,4 +125,11 @@ export class FuelRequestsService {
     req.acceptedAt = new Date();
     return this.reqRepo.save(req);
   }
+
+  acceptedByDistributor(distributorId: number) {
+  return this.reqRepo.find({
+    where: { status: FuelRequestStatus.ACCEPTED, acceptedBy: { id: distributorId } },
+    order: { id: 'DESC' },
+  });
+}
 }

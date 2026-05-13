@@ -28,6 +28,8 @@ import ApplyVehicle from './pages/user/ApplyVehicle';
 import AdminVehicleRequests from './pages/admin/AdminVehicleRequests';
 import AdminVehicleRequestDetails from './pages/admin/AdminVehicleRequestDetails';
 import AdminFuelPrices from './pages/admin/AdminFuelPrices';
+import TakeFuelRequest from './pages/user/TakeFuelRequest';
+import DistributorRequests from './pages/distributor/DistributorRequests';
 
 type Me = { id: number; role: 'ADMIN' | 'USER' | 'DISTRIBUTOR' };
 
@@ -166,6 +168,24 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           element={
             <RequireAuth>
               <AdminFuelPrices />
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          path="/user/vehicles/:id/fuel"
+          element={
+            <RequireAuth>
+              <TakeFuelRequest />
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          path="/distributor/requests"
+          element={
+            <RequireAuth>
+              <DistributorRequests />
             </RequireAuth>
           }
         />

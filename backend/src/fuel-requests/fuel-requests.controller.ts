@@ -52,4 +52,11 @@ export class FuelRequestsController {
   reject(@Request() req: any, @Param('id', ParseIntPipe) id: number) {
     return this.fuelRequestsService.reject(req.user.id, id);
   }
+  
+  @Roles(Role.DISTRIBUTOR)
+  @Get('accepted')
+  accepted(@Request() req: any) {
+  return this.fuelRequestsService.acceptedByDistributor(req.user.id);
+}
+  
 }
