@@ -6,7 +6,7 @@ export class CreateFuelRequestDto {
   vehicleId!: number;
 
   @IsInt()
-  stationId!: number;
+  distributorUserId!: number;
 
   @IsEnum(FuelType)
   fuelType!: FuelType;

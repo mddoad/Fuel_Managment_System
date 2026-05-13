@@ -110,4 +110,21 @@ export class DistributorService {
 
     return { message: 'Distributor approved', distributorUserId: user.id };
   }
+
+    async listApprovedStations() {
+    // DistributorProfile table: one row per distributor user
+    // Return only what user needs
+    return this.profileRepo.find({
+      order: { id: 'DESC' },
+      select: {
+        id: true,
+        userId: true,
+        stationName: true,
+        stationPhone: true,
+        address: true,
+        ownerName: true,
+        ownerPhone: true,
+      },
+    });
+  }
 }

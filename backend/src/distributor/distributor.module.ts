@@ -5,10 +5,11 @@ import { DistributorApplication } from './distributor-application.entity';
 import { DistributorController } from './distributor.controller';
 import { DistributorService } from './distributor.service';
 import { DistributorProfile } from './distributor-profile.entity';
+import { DistributorPublicController } from './distributor-public.controller';
 
 @Module({
   imports: [TypeOrmModule.forFeature([DistributorApplication, DistributorProfile, User])],
-  controllers: [DistributorController],
+  controllers: [DistributorController, DistributorPublicController],
   providers: [DistributorService],
 })
 export class DistributorModule {}

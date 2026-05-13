@@ -11,52 +11,45 @@ import { FuelRequestsService } from './fuel-requests.service';
 export class FuelRequestsController {
   constructor(private readonly fuelRequestsService: FuelRequestsService) {}
 
-  // USER creates request
   @Roles(Role.USER)
   @Post()
   create(@Request() req: any, @Body() dto: CreateFuelRequestDto) {
     return this.fuelRequestsService.create(req.user.id, dto);
   }
 
-  // USER sees own requests
   @Roles(Role.USER)
   @Get('mine')
   mine(@Request() req: any) {
     return this.fuelRequestsService.mine(req.user.id);
   }
 
-  // DISTRIBUTOR sees pending (for now global)
   @Roles(Role.DISTRIBUTOR)
   @Get('pending')
-  pending() {
-    return this.fuelRequestsService.pendingForDistributor();
+  pending(@Request() req: any) {
+    return this.fuelRequestsService.pendingForDistributor(req.user.id);
   }
 
-  // DISTRIBUTOR accepts
+  @Roles(Role.DISTRIBUTOR)
+  @Get('accepted')
+  accepted(@Request() req: any) {
+    return this.fuelRequestsService.acceptedByDistributor(req.user.id);
+  }
+
   @Roles(Role.DISTRIBUTOR)
   @Post(':id/accept')
   accept(@Request() req: any, @Param('id', ParseIntPipe) id: number) {
     return this.fuelRequestsService.accept(req.user.id, id);
   }
 
-  // DISTRIBUTOR completes (creates FuelLog)
   @Roles(Role.DISTRIBUTOR)
   @Post(':id/complete')
   complete(@Request() req: any, @Param('id', ParseIntPipe) id: number) {
     return this.fuelRequestsService.complete(req.user.id, id);
   }
 
-  // DISTRIBUTOR rejects
   @Roles(Role.DISTRIBUTOR)
   @Post(':id/reject')
   reject(@Request() req: any, @Param('id', ParseIntPipe) id: number) {
     return this.fuelRequestsService.reject(req.user.id, id);
   }
-  
-  @Roles(Role.DISTRIBUTOR)
-  @Get('accepted')
-  accepted(@Request() req: any) {
-  return this.fuelRequestsService.acceptedByDistributor(req.user.id);
-}
-  
 }
