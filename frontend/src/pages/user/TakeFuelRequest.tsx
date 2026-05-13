@@ -7,7 +7,7 @@ type FuelPrice = { fuelType: 'OCTANE' | 'DIESEL' | 'CNG'; pricePerUnit: number }
 
 // response from GET /public/distributors/stations
 type DistStation = {
-  userId?: number; // optional (depends on your backend select)
+  userId?: number;
   stationId: number;
   stationName: string;
   stationPhone?: string;
@@ -25,7 +25,7 @@ export default function TakeFuelRequest() {
   const [prices, setPrices] = useState<FuelPrice[]>([]);
   const [query, setQuery] = useState('');
 
-  const [stationId, setStationId] = useState<number | ''>('');
+  const [stationId, setStationId] = useState<number | ''>(''); // keep '' as "not selected"
   const [fuelType, setFuelType] = useState<'OCTANE' | 'DIESEL' | 'CNG'>('OCTANE');
   const [amount, setAmount] = useState<number>(1);
 
@@ -66,12 +66,19 @@ export default function TakeFuelRequest() {
         const found = myVehicles.find((v) => v.id === vehicleId) ?? null;
         setVehicle(found);
 
-        const distStations: DistStation[] = stRes.data;
-        setStations(distStations);
+        // normalize stationId to number (in case backend returns as string)
+        const distStations: DistStation[] = (stRes.data ?? []).map((s: any) => ({
+          ...s,
+          stationId: Number(s.stationId),
+        }));
 
+        const validStations = distStations.filter((s) => Number.isInteger(s.stationId) && s.stationId > 0);
+
+        setStations(validStations);
         setPrices(prRes.data);
 
-        if (distStations.length > 0) setStationId(distStations[0].stationId);
+        if (validStations.length > 0) setStationId(validStations[0].stationId);
+        else setStationId('');
       } catch (err: any) {
         if (err?.response?.status === 401) {
           localStorage.removeItem('accessToken');
@@ -88,7 +95,10 @@ export default function TakeFuelRequest() {
     setSuccess(null);
 
     if (!vehicle) return setError('Vehicle not found (not approved or not yours)');
-    if (stationId === '') return setError('Select a station');
+
+    // stationId must be a real number
+    if (stationId === '' || !Number.isInteger(stationId)) return setError('Select a station');
+
     if (!amount || amount <= 0) return setError('Amount must be greater than 0');
     if (!pricePerUnit || pricePerUnit <= 0) return setError('Fuel price not set by admin yet');
 
@@ -96,10 +106,11 @@ export default function TakeFuelRequest() {
     try {
       await api.post('/fuel-requests', {
         vehicleId: vehicle.id,
-        stationId,
+        stationId: Number(stationId),
         fuelType,
-        amount,
+        amount: Number(amount),
       });
+
       setSuccess('Fuel request sent to station.');
     } catch (err: any) {
       setError(err?.response?.data?.message ?? 'Failed to send request');
@@ -164,22 +175,29 @@ export default function TakeFuelRequest() {
           />
 
           <div style={{ marginTop: 10 }}>
-            <select className="input" value={stationId} onChange={(e) => setStationId(Number(e.target.value))}>
+            <select
+              className="input"
+              value={stationId === '' ? '' : String(stationId)}
+              onChange={(e) => setStationId(e.target.value === '' ? '' : Number(e.target.value))}
+              disabled={stations.length === 0}
+            >
+              {stations.length === 0 && <option value="">No stations</option>}
+
               {filteredStations.map((s) => (
-                <option key={s.stationId} value={s.stationId}>
+                <option key={s.stationId} value={String(s.stationId)}>
                   {s.stationName}{s.address ? ` — ${s.address}` : ''}
                 </option>
               ))}
             </select>
           </div>
 
-          <button className="btn" style={{ marginTop: 12 }} onClick={submit} disabled={loading}>
+          <button className="btn" style={{ marginTop: 12 }} onClick={submit} disabled={loading || stations.length === 0}>
             {loading ? 'Sending...' : 'Send Request'}
           </button>
 
           {stations.length === 0 && (
             <div className="muted" style={{ marginTop: 10 }}>
-              No distributor stations found. Please wait for distributor approval or create distributors.
+              No distributor stations found. Please approve a distributor (so stationId gets created).
             </div>
           )}
         </div>
