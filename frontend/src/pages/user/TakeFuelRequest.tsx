@@ -7,11 +7,11 @@ type FuelPrice = { fuelType: 'OCTANE' | 'DIESEL' | 'CNG'; pricePerUnit: number }
 
 // response from GET /public/distributors/stations
 type DistStation = {
-  userId?: number;
   stationId: number;
   stationName: string;
   stationPhone?: string;
   address?: string;
+  userId?: number; // optional, ok if backend includes it
 };
 
 export default function TakeFuelRequest() {
@@ -25,7 +25,7 @@ export default function TakeFuelRequest() {
   const [prices, setPrices] = useState<FuelPrice[]>([]);
   const [query, setQuery] = useState('');
 
-  const [stationId, setStationId] = useState<number | ''>(''); // keep '' as "not selected"
+  const [stationId, setStationId] = useState<number | ''>(''); // '' means not selected
   const [fuelType, setFuelType] = useState<'OCTANE' | 'DIESEL' | 'CNG'>('OCTANE');
   const [amount, setAmount] = useState<number>(1);
 
@@ -62,11 +62,10 @@ export default function TakeFuelRequest() {
           api.get('/fuel-prices'),
         ]);
 
-        const myVehicles: Vehicle[] = vhRes.data;
+        const myVehicles: Vehicle[] = vhRes.data ?? [];
         const found = myVehicles.find((v) => v.id === vehicleId) ?? null;
         setVehicle(found);
 
-        // normalize stationId to number (in case backend returns as string)
         const distStations: DistStation[] = (stRes.data ?? []).map((s: any) => ({
           ...s,
           stationId: Number(s.stationId),
@@ -75,7 +74,7 @@ export default function TakeFuelRequest() {
         const validStations = distStations.filter((s) => Number.isInteger(s.stationId) && s.stationId > 0);
 
         setStations(validStations);
-        setPrices(prRes.data);
+        setPrices(prRes.data ?? []);
 
         if (validStations.length > 0) setStationId(validStations[0].stationId);
         else setStationId('');
@@ -95,10 +94,7 @@ export default function TakeFuelRequest() {
     setSuccess(null);
 
     if (!vehicle) return setError('Vehicle not found (not approved or not yours)');
-
-    // stationId must be a real number
     if (stationId === '' || !Number.isInteger(stationId)) return setError('Select a station');
-
     if (!amount || amount <= 0) return setError('Amount must be greater than 0');
     if (!pricePerUnit || pricePerUnit <= 0) return setError('Fuel price not set by admin yet');
 

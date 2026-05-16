@@ -5,7 +5,6 @@ import ReactDOM from 'react-dom/client';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { api } from './api/client';
 
-import Dashboard from './pages/Dashboard'; // (you can keep for now; later we will use DistributorDashboard)
 import Login from './pages/Login';
 import Signup from './pages/Signup';
 import UserSignup from './pages/UserSignup';
@@ -30,6 +29,8 @@ import AdminVehicleRequestDetails from './pages/admin/AdminVehicleRequestDetails
 import AdminFuelPrices from './pages/admin/AdminFuelPrices';
 import TakeFuelRequest from './pages/user/TakeFuelRequest';
 import DistributorRequests from './pages/distributor/DistributorRequests';
+import DistributorDashboard from './pages/distributor/DistributorDashboard';
+import DistributorAcceptedRequests from './pages/distributor/DistributorAcceptedRequests';
 
 type Me = { id: number; role: 'ADMIN' | 'USER' | 'DISTRIBUTOR' };
 
@@ -60,8 +61,8 @@ function HomeRouter() {
   if (me.role === 'ADMIN') return <AdminDashboard />;
   if (me.role === 'USER') return <UserDashboard />;
 
-  // DISTRIBUTOR: for now keep old dashboard until we build distributor dashboard
-  return <Dashboard />;
+  // ✅ DISTRIBUTOR: show distributor dashboard
+  return <DistributorDashboard />;
 }
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
@@ -186,6 +187,24 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           element={
             <RequireAuth>
               <DistributorRequests />
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          path="/distributor/dashboard"
+          element={
+            <RequireAuth>
+              <DistributorDashboard />
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          path="/distributor/accepted"
+          element={
+            <RequireAuth>
+              <DistributorAcceptedRequests />
             </RequireAuth>
           }
         />

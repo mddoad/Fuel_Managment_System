@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { api } from '../api/client';
 
-type Me = { id: number; email?: string; phone?: string; role: 'ADMIN' | 'USER' };
+type Me = { id: number; email?: string; phone?: string; role: 'ADMIN' | 'USER' | 'DISTRIBUTOR' };
 type Station = { id: number; name: string; address?: string };
 type Vehicle = { id: number; plateNumber: string; type?: string };
 type FuelLog = { id: number; liters: number; totalCost: number; date: string };
