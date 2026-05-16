@@ -31,6 +31,7 @@ import TakeFuelRequest from './pages/user/TakeFuelRequest';
 import DistributorRequests from './pages/distributor/DistributorRequests';
 import DistributorDashboard from './pages/distributor/DistributorDashboard';
 import DistributorAcceptedRequests from './pages/distributor/DistributorAcceptedRequests';
+import DistributorMe from './pages/distributor/DistributorMe';
 
 type Me = { id: number; role: 'ADMIN' | 'USER' | 'DISTRIBUTOR' };
 
@@ -196,6 +197,15 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
           element={
             <RequireAuth>
               <DistributorDashboard />
+            </RequireAuth>
+          }
+        />
+
+        <Route
+          path="/distributor/me"
+          element={
+            <RequireAuth>
+              <DistributorMe />
             </RequireAuth>
           }
         />

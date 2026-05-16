@@ -134,4 +134,16 @@ export class DistributorService {
         } as any,
       });
     }
+
+      async getMyProfile(distributorUserId: number) {
+        const profile = await this.profileRepo.findOne({
+          where: { userId: distributorUserId },
+        });
+
+        if (!profile) {
+          throw new BadRequestException('Distributor profile not found');
+        }
+
+        return profile;
+      }
 }

@@ -3,6 +3,7 @@ import {
   Body,
   Controller,
   Get,
+  Request,
   Param,
   ParseIntPipe,
   Post,
@@ -69,5 +70,12 @@ export class DistributorController {
   @Post('applications/:id/approve')
   approve(@Param('id', ParseIntPipe) id: number) {
     return this.distributorService.approve(id);
+  }
+
+  @UseGuards(AuthGuard('jwt'), RolesGuard)
+  @Roles(Role.DISTRIBUTOR)
+  @Get('me')
+  me(@Request() req: any) {
+    return this.distributorService.getMyProfile(req.user.id);
   }
 }
